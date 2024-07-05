@@ -21,7 +21,7 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   />
-  <title>Document</title>
+  <title>To Do List</title>
 
   <script>
     let module = angular.module("toDoList", []);
@@ -58,19 +58,19 @@
         localStorage.setItem("toDoLocal", JSON.stringify($scope.addList));
       };
 
-      // Functions to get the paginations items to be shown
+      // Function to get the pagination items to be shown
       $scope.getPageItems = function () {
+        const filteredList = $scope.addList.filter(item => item.toDoText.toLowerCase().includes($scope.searchText ? $scope.searchText.toLowerCase() : ''));
         const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
         const end = start + $scope.itemsPerPage;
-        const filteredList = $scope.addList.filter(item => item.toDoText.includes($scope.searchText || ''));
         return filteredList.slice(start, end);
       };
 
       // Updates the pagination
       $scope.updatePagination = function () {
-        // Calculating total number of pages
+        // Calculate total number of pages
         $scope.totalPages = Math.ceil(
-          $scope.addList.filter(item => item.toDoText.includes($scope.searchText || '')).length / $scope.itemsPerPage
+          $scope.addList.filter(item => item.toDoText.toLowerCase().includes($scope.searchText ? $scope.searchText.toLowerCase() : '')).length / $scope.itemsPerPage
         );
 
         if ($scope.currentPage > $scope.totalPages) {
@@ -84,8 +84,9 @@
         }
       };
 
-      // Watch for changes in search text to update pagination
+      // Watch for changes in search text to update pagination and reset current page
       $scope.$watch('searchText', function () {
+        $scope.currentPage = 1;
         $scope.updatePagination();
       });
 
@@ -128,9 +129,9 @@
               class="form-check-input hover-shadow-sm"
               ng-model="x.done"
             />
-            <span ng-class="{'text-decoration-line-through': x.done}"
-              >{{x.toDoText}}</span
-            >
+            <span ng-class="{'text-decoration-line-through': x.done}">
+              {{x.toDoText}}
+            </span>
           </div>
 
           <div class="d-flex w-100" ng-if="editIndex === index">
@@ -191,7 +192,6 @@
       <div class="col-12 d-flex justify-content-center">
         <nav aria-label="Page navigation">
           <ul class="pagination">
-          
             <li class="page-item" ng-class="{disabled: currentPage === 1}">
               <a class="page-link" href="" ng-click="goToPage(currentPage - 1)">Previous</a>
             </li>
@@ -201,7 +201,6 @@
             <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
               <a class="page-link" href="" ng-click="goToPage(currentPage + 1)">Next</a>
             </li>
-     
           </ul>
         </nav>
       </div>
