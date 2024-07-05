@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="toDoList">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"
+      integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <title>Document</title>
+
+    <script>
+      let module = angular.module("toDoList", []);
+      module.controller("toDoListController", function ($scope) {
+        $scope.addList = [{ toDoText: "Sample Task", done: true }];
+        $scope.editIndex = -1;
+
+        $scope.addToDo = function () {
+          $scope.addList.push({ toDoText: $scope.toDoText, done: false });
+          $scope.toDoText = "";
+        };
+
+        $scope.removeToDo = function ($index) {
+          $scope.addList.splice($index, 1);
+        };
+
+        $scope.editToDo = function ($index) {
+          $scope.editIndex = $index;
+        };
+
+        $scope.saveToDo = function () {
+          $scope.editIndex = -1;
+        };
+      });
+    </script>
+  </head>
+  <body ng-controller="toDoListController">
+    <div class="container mt-5 bg-dark p-4  text-white">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="display-4 text-center mb-4">To Do List</h2>
+        </div>
+        <div class="col-3">
+
+        </div>
+        <div class="col-6">
+          <form class="form" ng-submit="addToDo()">
+            <div class="d-flex flex-row gap-3">
+             
+              <input type="text" class="form-control hover-shadow" id="inputToDo" ng-model="toDoText" placeholder="Enter Your To Do" required />
+              <button type="submit" class="btn btn-primary  hover-shadow">Add</button>
+            </form>
+            </div>
+
+            <div class="col-md-2">
+              </div>
+           
+           
+        </div>
+
+
+     
+
+
+<div class="toDolists flex-row justify-content-center">
+  <ul class="list-group align-items-center mt-2">
+    <li class="list-group-item w-50 d-flex justify-content-between" ng-repeat="(index, x) in addList">
+
+    <div ng-if="editIndex !== index" >
+      <input type="checkbox" class="form-check-input hover-shadow-sm " ng-model="x.done" />
+      <span ng-class="{'text-decoration-line-through': x.done}" >{{x.toDoText}}</span>
+    </div>
+       
+  
+
+     <div class="d-flex w-100" ng-if="editIndex === index">
+      <input class="form-control hover-shadow-sm" type="text" ng-model="x.toDoText"  required />
+      <button class="btn btn-success me-2"  ng-click="saveToDo()">Save</button>
+
+     </div>
+       
+        <div ng-if="editIndex !== index" >
+          <a href="" class="text-decoration-none" ng-click="editToDo(index)" >
+            <i class="bi bi-pen text-warning"></i>
+          </a>
+
+          <a href="" class="text-decoration-none" ng-click="removeToDo($index)" >
+            <i class="bi bi-x-lg text-danger"></i>
+          </a>
+        </div>
+       
+
+     
+
+    </li>
+  </ul>
+</div>
+        
+      </div>
+    </div>
+  </body>
+</html>
